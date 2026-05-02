@@ -48,8 +48,8 @@ docker run -d -p 8080:8080 searxng/searxng
 
 ```bash
 # 1. Clone the repository
-git clone https://github.com/your-username/medskript.git
-cd medskript
+git clone https://github.com/pyMoLt/MedScript.git
+cd MedScript
 
 # 2. Create and activate a virtual environment
 python3 -m venv .venv

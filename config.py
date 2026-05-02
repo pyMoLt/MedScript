@@ -143,6 +143,7 @@ OCR_MAX_PAGES_PER_ANALYSIS_BATCH = 22      # Max thumbnails per analysis call
 OCR_ANALYSIS_CACHE_ENABLED       = True    # Cache analysis-pass JSON
 OCR_ANALYSIS_CACHE_DIR           = Path.home() / ".medskript" / "cache" / "ocr_analysis"
 OCR_WRITING_CACHE_DIR            = Path.home() / ".medskript" / "cache" / "ocr_writing"
+TEXT_WRITING_CACHE_DIR           = Path.home() / ".medskript" / "cache" / "text_writing"
 OCR_ROLLING_CONTEXT_CHARS        = 400     # Characters of last section as context
 OCR_MAX_FIGURES_PER_SECTION      = 8       # Max Docling figures offered per section
 OCR_FIGURE_JPEG_QUALITY          = 88      # JPEG quality of saved figures

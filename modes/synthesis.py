@@ -25,6 +25,9 @@ from core.text_utils import (
 )
 from core.output import assemble_final_markdown, markdown_to_pdf, save_markdown
 from core.cache import SimpleCache
+from core.page_renderer import (
+    get_text_writing_cache_key, load_text_writing_cache, save_text_writing_cache,
+)
 from rag.tools import get_tools_for_run, ToolExecutor
 from rag.augmenter import get_writer_tool_instruction, resolve_rag_image_tags
 
@@ -704,6 +707,28 @@ def process_deep_synthesis(
                     user_msg,
                 ]
 
+                # ── Writing cache: skip LLM call if result already cached ──────
+                c_key = get_text_writing_cache_key(
+                    f"{ch_title}|{sub_title}|{full_txt}", text_model_id, detail_level
+                )
+                cached_text = load_text_writing_cache(c_key)
+                if cached_text is not None:
+                    log(f"   💾 {sec_num} {sub_title} — aus Cache geladen.")
+                    part_text = cached_text
+                    chapter_parts.append(part_text)
+                    last_section_full = part_text
+                    last_section_end = part_text[-400:].replace("\n", " ")
+                    if preview_callback:
+                        temp_chapters = written_chapters + [f"# {ch_title}\n\n" + "\n\n".join(chapter_parts)]
+                        inter_md = assemble_final_markdown(
+                            parts=temp_chapters,
+                            title=f"{final_book_title} (In Bearbeitung...)",
+                            detail_level=detail_level,
+                            source_files=[p.name for p in source_files],
+                        )
+                        preview_callback(inter_md)
+                    continue
+
                 log(f"   ✍️  {sec_num} {sub_title}...")
                 if tools and executor and config.AGENT_TOOLS_ENABLED:
                     executor.reset_section_counters()
@@ -728,6 +753,7 @@ def process_deep_synthesis(
                     )
 
                 part_text = clean_llm_markdown_output(part_text)
+                save_text_writing_cache(c_key, part_text)
                 chapter_parts.append(part_text)
                 last_section_full = part_text
                 last_section_end = part_text[-400:].replace("\n", " ")

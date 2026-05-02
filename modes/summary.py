@@ -24,6 +24,9 @@ from core.text_utils import (
 )
 from core.output import assemble_final_markdown, markdown_to_pdf, save_markdown
 from core.cache import SimpleCache
+from core.page_renderer import (
+    get_text_writing_cache_key, load_text_writing_cache, save_text_writing_cache,
+)
 from rag.tools import get_tools_for_run, ToolExecutor
 from rag.augmenter import get_writer_tool_instruction, resolve_rag_image_tags
 
@@ -360,6 +363,28 @@ def process_single_file(
                 check_cancel()
                 progress(20 + int(i / n_chunks * 40), f"Verarbeite Chunk {i + 1}/{n_chunks}...")
 
+                # ── Writing cache: skip LLM call if result already cached ──────
+                c_key = get_text_writing_cache_key(chunk, model_id, detail_level)
+                cached_text = load_text_writing_cache(c_key)
+                if cached_text is not None:
+                    log(f"   💾 Chunk {i + 1} aus Cache geladen.")
+                    cleaned = cached_text
+                    processed_texts.append(cleaned)
+                    import re as _re
+                    for m in _re.finditer(r'#{2,3}\s+(.+)', cleaned):
+                        h = m.group(1).strip()
+                        if h and h not in covered_headers:
+                            covered_headers.append(h)
+                    if preview_callback:
+                        inter_md = assemble_final_markdown(
+                            parts=processed_texts,
+                            title=f"{stem} (In Bearbeitung...)",
+                            detail_level=detail_level,
+                            source_files=[source_path.name],
+                        )
+                        preview_callback(inter_md)
+                    continue
+
                 # ctx_before: verarbeiteter Vorgänger-Chunk (letzte Zeichen) + Themen-Liste
                 if i > 0 and processed_texts:
                     raw_before = extract_last_n_chars(processed_texts[-1], config.CONTEXT_CHARS)
@@ -386,6 +411,7 @@ def process_single_file(
                     tool_executor=executor,
                 )
                 cleaned = clean_llm_markdown_output(processed)
+                save_text_writing_cache(c_key, cleaned)
                 processed_texts.append(cleaned)
 
                 # Überschriften aus diesem Chunk extrahieren und merken

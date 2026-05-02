@@ -465,3 +465,42 @@ def save_writing_cache(cache_key: str, text: str) -> None:
         cache_path.write_text(text, encoding="utf-8")
     except Exception as e:
         print(f"   ⚠️ Writing-Cache Speichern fehlgeschlagen: {e}")
+
+
+# ── Text-Mode Writing Cache ───────────────────────────────────────────────────
+# Same resume-on-abort semantics as the OCR writing cache, but stored under
+# TEXT_WRITING_CACHE_DIR and keyed on section content rather than page numbers.
+
+def get_text_writing_cache_key(content: str, model_id: str, detail_level: int) -> str:
+    """
+    Stable MD5 hash for a text-mode writing section.
+
+    content      – raw source text (chunk or full_txt) fed to the LLM.
+    model_id     – separate cache entry when model changes.
+    detail_level – separate entry for different output styles.
+    """
+    content_hash = hashlib.md5(content.encode("utf-8", errors="replace")).hexdigest()
+    data = {"c": content_hash, "mod": model_id, "det": detail_level}
+    s = json.dumps(data, sort_keys=True)
+    return hashlib.md5(s.encode("utf-8")).hexdigest()
+
+
+def load_text_writing_cache(cache_key: str) -> str | None:
+    """Load a cached text-mode section. Returns None when not found."""
+    cache_path = config.TEXT_WRITING_CACHE_DIR / f"{cache_key}.txt"
+    if cache_path.exists():
+        try:
+            return cache_path.read_text(encoding="utf-8")
+        except Exception:
+            return None
+    return None
+
+
+def save_text_writing_cache(cache_key: str, text: str) -> None:
+    """Persist a finished text-mode section immediately after the LLM call."""
+    try:
+        config.TEXT_WRITING_CACHE_DIR.mkdir(parents=True, exist_ok=True)
+        cache_path = config.TEXT_WRITING_CACHE_DIR / f"{cache_key}.txt"
+        cache_path.write_text(text, encoding="utf-8")
+    except Exception as e:
+        print(f"   ⚠️ Text-Writing-Cache Speichern fehlgeschlagen: {e}")

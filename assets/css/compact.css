@@ -1,0 +1,21 @@
+/* assets/css/compact.css — Kompakter Stil für Cheat-Sheets (niedrige Detail-Levels) */
+
+@page { size: A4; margin: 2cm 1.8cm; }
+body {
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 10pt; line-height: 1.5; color: #333; text-align: left;
+}
+h1 { font-size: 18pt; color: #2C3E50; border-bottom: 2px solid #ccc;
+     padding-bottom: 6px; margin-top: 20px; page-break-before: always; }
+h1:first-of-type { page-break-before: avoid; }
+h2 { font-size: 13pt; color: #16a085; margin-top: 16px; font-weight: 700; }
+h3 { font-size: 11pt; color: #555; font-weight: bold; margin-top: 12px; }
+p { margin-bottom: 6px; }
+ul, ol { margin-bottom: 8px; padding-left: 18px; }
+li { margin-bottom: 3px; }
+img { max-width: 70%; max-height: 30vh; display: block; margin: 12px auto; border: 1px solid #ddd; }
+.image-caption { text-align: center; font-size: 0.8em; color: #888; font-style: italic; }
+blockquote { border-left: 3px solid #e67e22; margin: 10px 0; padding: 6px 14px; color: #d35400; background: #fffaf5; }
+table { width: 100%; border-collapse: collapse; margin: 12px 0; font-size: 9pt; }
+th, td { border: 1px solid #ccc; padding: 5px 8px; text-align: left; }
+th { background-color: #f0f0f0; font-weight: bold; }

@@ -1,0 +1,61 @@
+# ── Python ────────────────────────────────────────────────────────────────────
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.egg-info/
+dist/
+build/
+*.egg
+.eggs/
+*.whl
+
+# ── Virtuelle Umgebungen ───────────────────────────────────────────────────────
+.venv/
+venv/
+env/
+.env/
+ENV/
+
+# ── Nutzer-Einstellungen (lokal, nicht teilen) ─────────────────────────────────
+# ~/.medskript/ liegt außerhalb des Repos; hier zur Dokumentation:
+# ~/.medskript/settings.json
+# ~/.medskript/cache/
+
+# ── RAG-Stores (nutzerspezifische Lehrbuch-Daten) ─────────────────────────────
+# Das data/-Verzeichnis wird zur Laufzeit erzeugt.
+# Nur das .gitkeep-Marker-File gehört ins Repo.
+data/rag_stores/*/
+!data/rag_stores/.gitkeep
+
+# ── Generierte Outputs ─────────────────────────────────────────────────────────
+# Lernskripte landen per Default auf dem Desktop des Nutzers,
+# können aber auch in den Projektordner umgeleitet werden.
+*.pdf
+*.html
+Vorlesung_Lernskripte/
+
+# ── macOS ──────────────────────────────────────────────────────────────────────
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+
+# ── IDEs ──────────────────────────────────────────────────────────────────────
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+
+# ── Archiv (alte Entwurfs-Skripte) ────────────────────────────────────────────
+archive/
+
+# ── Logs ──────────────────────────────────────────────────────────────────────
+*.log
+
+# ── Pytest / Coverage ─────────────────────────────────────────────────────────
+.pytest_cache/
+.coverage
+htmlcov/

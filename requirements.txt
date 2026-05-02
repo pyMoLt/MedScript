@@ -1,0 +1,34 @@
+# requirements.txt — MedSkript
+# Install with: pip install -r requirements.txt
+
+# ── Core ──────────────────────────────────────────────────────────────────────
+openai>=1.0.0            # LM Studio API client (OpenAI-compatible format)
+docling>=2.0.0           # PDF parsing and structure recognition
+docling-core>=2.0.0      # Docling data models (TextItem, TableItem, PictureItem)
+Pillow>=10.0.0           # Image loading, resizing, and Base64 encoding
+pypdf>=4.0.0             # PDF repair (fixes malformed PDFs before Docling processes them)
+markdown>=3.5.0          # Markdown to HTML conversion
+weasyprint>=60.0         # HTML/CSS to PDF export  |  macOS: brew install pango
+numpy>=1.24.0            # Array operations for image deduplication
+
+# ── RAG (Retrieval-Augmented Generation) ──────────────────────────────────────
+chromadb>=0.4.0          # Local vector database (default backend)
+qdrant-client>=1.7.0     # Optional — only needed if RAG_BACKEND = "qdrant"
+
+# ── GUI ────────────────────────────────────────────────────────────────────────
+# tkinter is part of the Python standard library.
+# On Ubuntu/Debian it must be installed separately: sudo apt install python3-tk
+
+# ── OCR mode ──────────────────────────────────────────────────────────────────
+pymupdf>=1.23.0          # Renders PDF pages to PIL images (import fitz) — no Poppler needed
+
+# ── Optional extensions ────────────────────────────────────────────────────────
+opencv-python>=4.8.0     # AdvancedDeduplicator (ORB feature matching) — falls back to dHash without it
+genanki>=0.13.0          # Anki flashcard export — only needed if anki_export = True
+
+# ── Web search + URL fetch ─────────────────────────────────────────────────────
+requests>=2.31.0         # HTTP client for SearxNG and URL fetching
+beautifulsoup4>=4.12.0   # HTML → plain text extraction for the fetch_url tool
+
+# ── Development ───────────────────────────────────────────────────────────────
+pytest>=7.0.0

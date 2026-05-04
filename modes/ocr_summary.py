@@ -530,7 +530,7 @@ def _run_ocr_pipeline(
         # OCRToolExecutor für diese Gruppe
         ocr_executor = OCRToolExecutor(
             figures=group.figures,
-            output_figures_dir=output_dir / "figures",
+            output_figures_dir=output_dir / "images",
             base_executor=base_executor,
             log_callback=log,
             web_search_enabled=web_enabled,
@@ -751,7 +751,7 @@ def _run_ocr_pipeline(
     )
     
     # RAG-Image-Tags auflösen (falls Bilder via RAG eingebunden wurden)
-    final_markdown = resolve_rag_image_tags(final_markdown, output_dir / "figures")
+    final_markdown = resolve_rag_image_tags(final_markdown, output_dir / "images")
 
     # Markdown speichern
     md_path = output_dir / f"{safe_title}.md"

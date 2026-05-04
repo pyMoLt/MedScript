@@ -492,7 +492,7 @@ def _run_ocr_synthesis_pipeline(
 
         _ocr_exec = OCRToolExecutor(
             figures=batch_figures,
-            output_figures_dir=output_dir / "figures",
+            output_figures_dir=output_dir / "images",
             base_executor=base_executor,
             log_callback=log,
             web_search_enabled=web_enabled,
@@ -892,7 +892,7 @@ def _run_ocr_synthesis_pipeline(
     )
     
     # RAG-Image-Tags auflösen (falls Bilder via RAG eingebunden wurden)
-    final_markdown = resolve_rag_image_tags(final_markdown, output_dir / "figures")
+    final_markdown = resolve_rag_image_tags(final_markdown, output_dir / "images")
 
     md_path = output_dir / f"{safe_title}.md"
     save_markdown(final_markdown, md_path)

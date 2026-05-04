@@ -99,6 +99,9 @@ def resolve_rag_image_tags(markdown_text: str, images_output_dir: Path) -> str:
     """
     pattern = get_image_tag_pattern()
     images_output_dir.mkdir(parents=True, exist_ok=True)
+    
+    # Der Ordnername für den relativen Pfad im Markdown (z.B. 'images')
+    folder_name = images_output_dir.name
 
     def replace_tag(match):
         source_path_str = match.group(1).strip()
@@ -111,7 +114,7 @@ def resolve_rag_image_tags(markdown_text: str, images_output_dir: Path) -> str:
                 shutil.copy2(source_path, dest_path)
             except Exception:
                 return f"*[Kopier-Fehler: {source_path_str}]*"
-        rel_path = f"images/{dest_path.name}"
+        rel_path = f"{folder_name}/{dest_path.name}"
         return (
             f"![Lehrbuch-Abbildung]({rel_path})\n"
             f"<p class='image-caption'>Quelle: Lehrbuch</p>"

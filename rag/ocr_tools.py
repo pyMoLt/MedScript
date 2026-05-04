@@ -69,14 +69,14 @@ class OCRToolExecutor:
     def __init__(
         self,
         figures: list["DoclingFigure"],
-        output_figures_dir: Path,
+        output_images_dir: Path,
         base_executor: "ToolExecutor",
         log_callback: callable | None = None,
         web_search_enabled: bool = False,
     ) -> None:
         # figure_id → DoclingFigure Mapping (nur Figuren dieser PageGroup)
         self.figures: dict[str, "DoclingFigure"] = {f.figure_id: f for f in figures}
-        self.output_figures_dir = output_figures_dir
+        self.output_images_dir = output_images_dir
         self.base_executor = base_executor
         self.log_callback = log_callback
         self.web_search_enabled = web_search_enabled
@@ -156,16 +156,16 @@ class OCRToolExecutor:
 
         # Zielpfad
         try:
-            self.output_figures_dir.mkdir(parents=True, exist_ok=True)
-            dest = self.output_figures_dir / f"{figure_id}.jpg"
+            self.output_images_dir.mkdir(parents=True, exist_ok=True)
+            dest = self.output_images_dir / f"{figure_id}.jpg"
             if not dest.exists():
                 shutil.copy2(str(fig.image_path), str(dest))
         except Exception as e:
             return f"[Fehler beim Kopieren von '{figure_id}': {e}]"
 
-        # Relativer Pfad für Markdown (relativ zum output_figures_dir.parent)
+        # Relativer Pfad für Markdown (relativ zum output_images_dir.parent)
         try:
-            rel_path = dest.relative_to(self.output_figures_dir.parent)
+            rel_path = dest.relative_to(self.output_images_dir.parent)
         except ValueError:
             rel_path = dest  # Fallback: absolut
 
